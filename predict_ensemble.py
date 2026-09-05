@@ -89,11 +89,11 @@ def predict_ensemble():
     if MODEL_PATH.exists():
         checkpoint_paths.append(MODEL_PATH)
 
-    # Prioritize best_model.pth and top Round 5 snapshots (>= 82.5% val accuracy)
-    r5_snaps = sorted(list(Path(".").glob("snapshot_r5_*.pth")), reverse=True)
-    selected_snaps = [s for s in r5_snaps if any(score in s.name for score in ["83.1", "83.0", "82.9", "82.8", "82.7", "82.5"])]
+    # Prioritize best_model.pth and top snapshots (>= 82.5% val accuracy)
+    all_snaps = sorted(list(Path(".").glob("snapshot_*.pth")), reverse=True)
+    selected_snaps = [s for s in all_snaps if any(score in s.name for score in ["89.", "88.", "87.", "86.", "85.", "84.", "83.1", "83.0", "82.9", "82.8", "82.7", "82.5"])]
     if not selected_snaps:
-        selected_snaps = r5_snaps[:6]
+        selected_snaps = all_snaps[:6]
     
     for s in selected_snaps:
         if s not in checkpoint_paths:
