@@ -1,0 +1,25 @@
+# Virtual Environment
+.venv/
+3lc-env/
+env/
+venv/
+
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Large Dataset & Data Dirs (Starter kit images)
+data/
+*.zip
+
+# PyTorch Model Checkpoints & Weights
+*.pth
+*.pt
+*.safetensors
+
+# OS & System artifacts
+.DS_Store
+Thumbs.db
+.system_generated/
+scratch/
