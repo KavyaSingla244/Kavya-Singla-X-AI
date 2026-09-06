@@ -5,7 +5,7 @@
 [![3LC](https://img.shields.io/badge/Powered%20By-3LC%20AI-green.svg)](https://3lc.ai)
 [![Kaggle](https://img.shields.io/badge/Kaggle-Top%20Leaderboard%201st%20Rank%20Beater-20beff.svg)](https://www.kaggle.com)
 
-A state-of-the-art solution for the **3LC Data-Centric AI Challenge on Kaggle: 6-Class Natural Scene Classification** (`buildings`, `forest`, `glacier`, `mountain`, `sea`, `street`).
+A state-of-the-art data-centric AI system for the **3LC Data-Centric AI Challenge on Kaggle: 6-Class Natural Scene Classification** (`buildings`, `forest`, `glacier`, `mountain`, `sea`, `street`).
 
 ---
 
@@ -15,6 +15,40 @@ A state-of-the-art solution for the **3LC Data-Centric AI Challenge on Kaggle: 6
 - **No Pretrained Weights**: Must train strictly **from scratch** (`weights=None`).
 - **Strict Labeling Budget**: Training dataset is strictly capped at **at most 3,000 samples with weight = 1.0** in the 3LC table (600 ground-truth seed + 2,400 curated from 6,000 unlabeled pool images).
 - **Core Objective**: Maximize model accuracy and real-world out-of-domain generalization through pure data-centric engineering, noise filtering, and multi-teacher knowledge distillation.
+
+---
+
+## 📊 3LC Interactive Dashboard & Data Curation Visualizations
+
+The 3LC platform was leveraged to inspect, curate, weight, and track datasets and training runs across the entire project lifecycle:
+
+### 1. Sample Weighting & Active Dataset Curation (Strict 3,000-Sample Limit)
+![3LC Sample Weights Curation](screenshots/3lc_sample_weights_curation.png)
+*Interactive curation of exactly 2,998 active training samples (`weight=1.0`) with inactive samples weighted to `0.0`, adhering strictly to the competition constraints.*
+
+---
+
+### 2. High-Dimensional Embeddings & Confusion Analysis
+![3LC Confusion Matrix & Embeddings](screenshots/3lc_confusion_matrix_embeddings.png)
+*Interactive 2D UMAP/t-SNE latent space visualizer and confusion matrix in 3LC, separating clusters and identifying ambiguous samples between Glaciers and Mountains.*
+
+---
+
+### 3. Data Table Inspection & Multi-Modal Sample Exploration
+![3LC Data Table Inspection](screenshots/3lc_data_table_inspection.png)
+*Granular 3LC table view tracking sample IDs, image URLs, ground-truth annotations, predicted probabilities, and confidence scores across the dataset.*
+
+---
+
+### 4. Training Run Metrics & Real-Time Performance Tracking
+![3LC Run Metrics](screenshots/3lc_run_metrics.png)
+*Epoch-by-epoch loss convergence, accuracy curves, and gradient telemetry logged across experimental runs in the 3LC workspace.*
+
+---
+
+### 5. 3LC Workspace Overview
+![3LC Dashboard Overview](screenshots/3lc_dashboard_overview.png)
+*Central 3LC project dashboard managing dataset revisions, table objects, run logs, and data pipelines.*
 
 ---
 
@@ -89,14 +123,19 @@ A state-of-the-art solution for the **3LC Data-Centric AI Challenge on Kaggle: 6
 ## 📂 Project Structure
 
 ```
-├── data/                       # Intel Scene dataset images (train, val, test)
+├── screenshots/                # 3LC Dashboard & Table Visualizations
+│   ├── 3lc_dashboard_overview.png
+│   ├── 3lc_run_metrics.png
+│   ├── 3lc_confusion_matrix_embeddings.png
+│   ├── 3lc_sample_weights_curation.png
+│   └── 3lc_data_table_inspection.png
 ├── best_model.pth              # 84.92% All-Time Record Checkpoint
 ├── snapshot_overnight_*.pth    # Elite 84.5%+ Snapshots
 ├── extract_multi_teacher_consensus.py  # DINOv2 + OpenCLIP Teacher Extractor
 ├── train_distill_v2.py         # Advanced CutMix 224px Distillation Engine
 ├── generate_master_overnight_submission.py # Master 6-Model Ensemble Generator
 ├── submission.csv              # Final Kaggle-ready predictions
-└── README.md
+└── README.md                   # Full Documentation & 3LC Report
 ```
 
 ---
