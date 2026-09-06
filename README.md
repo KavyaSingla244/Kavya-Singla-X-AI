@@ -3,56 +3,51 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c.svg)](https://pytorch.org/)
 [![3LC](https://img.shields.io/badge/Powered%20By-3LC%20AI-green.svg)](https://3lc.ai)
-[![Kaggle](https://img.shields.io/badge/Kaggle-Top%20Leaderboard%201st%20Rank%20Beater-20beff.svg)](https://www.kaggle.com)
+[![Kaggle](https://img.shields.io/badge/Kaggle-Top%20Leaderboard%20Rank%20%232%20(0.85777)-20beff.svg)](https://www.kaggle.com)
 
-A state-of-the-art data-centric AI system for the **3LC Data-Centric AI Challenge on Kaggle: 6-Class Natural Scene Classification** (`buildings`, `forest`, `glacier`, `mountain`, `sea`, `street`).
+A state-of-the-art data-centric AI pipeline for the **3LC Data-Centric AI Challenge on Kaggle: 6-Class Natural Scene Classification** (`buildings`, `forest`, `glacier`, `mountain`, `sea`, `street`).
 
 ---
 
-## 🎯 Challenge Overview & Strict Constraints
+## 🏆 Official Kaggle Competition Leaderboard Standings
+
+![Kaggle Leaderboard Rank #2](screenshots/kaggle_leaderboard_rank2_085777.png)
+*Official Kaggle Leaderboard: Team **Kavya Singla** securing **Rank #2** with a peak score of **0.85777**.*
+
+---
+
+## 🎯 Challenge Constraints & Guidelines
 
 - **Fixed Architecture**: Standard `ResNet-18` classifier (`ResNet18Classifier`).
 - **No Pretrained Weights**: Must train strictly **from scratch** (`weights=None`).
-- **Strict Labeling Budget**: Training dataset is strictly capped at **at most 3,000 samples with weight = 1.0** in the 3LC table (600 ground-truth seed + 2,400 curated from 6,000 unlabeled pool images).
-- **Core Objective**: Maximize model accuracy and real-world out-of-domain generalization through pure data-centric engineering, noise filtering, and multi-teacher knowledge distillation.
+- **Strict Labeling Budget**: Training dataset is strictly capped at **at most 3,000 active samples (`weight = 1.0`)** in the 3LC table (500 balanced samples per class, with the remaining 3,600 unlabeled pool images weighted to `0.0`).
+- **Core Objective**: Maximize accuracy and real-world generalization through pure data-centric engineering, noise filtering, foundation model consensus, and multi-teacher soft distillation.
 
 ---
 
-## 📊 3LC Interactive Dashboard & Data Curation Visualizations
+## 📊 3LC Interactive Dashboard, Tables & Data Curation
 
-The 3LC platform was leveraged to inspect, curate, weight, and track datasets and training runs across the entire project lifecycle:
+The **3LC AI Platform** was utilized for interactive table versioning, active sample selection, and dataset quality inspection:
 
-### 1. Sample Weighting & Active Dataset Curation (Strict 3,000-Sample Limit)
-![3LC Sample Weights Curation](screenshots/3lc_sample_weights_curation.png)
-*Interactive curation of exactly 2,998 active training samples (`weight=1.0`) with inactive samples weighted to `0.0`, adhering strictly to the competition constraints.*
-
----
-
-### 2. High-Dimensional Embeddings & Confusion Analysis
-![3LC Confusion Matrix & Embeddings](screenshots/3lc_confusion_matrix_embeddings.png)
-*Interactive 2D UMAP/t-SNE latent space visualizer and confusion matrix in 3LC, separating clusters and identifying ambiguous samples between Glaciers and Mountains.*
+### 1. Perfectly Balanced 3,000 Active Sample Curation (500 Per Class)
+![3LC Class Weights and Balance](screenshots/3lc_class_weights_balance_latest.png)
+*Exact budget compliance in 3LC: 500 samples per class (`buildings`, `forest`, `glacier`, `mountain`, `sea`, `street`) with `weight=1.0` (3,000 total active) and 3,600 unlabeled pool images set to `weight=0.0`.*
 
 ---
 
-### 3. Data Table Inspection & Multi-Modal Sample Exploration
-![3LC Data Table Inspection](screenshots/3lc_data_table_inspection.png)
-*Granular 3LC table view tracking sample IDs, image URLs, ground-truth annotations, predicted probabilities, and confidence scores across the dataset.*
+### 2. Dataset Versioning & 3LC Table Objects
+![3LC Tables Overview](screenshots/3lc_tables_overview_latest.png)
+*3LC table management displaying iterative dataset revisions (`train`, `train_0001`, `train_0000`, and `val`) tracking 6,600 total pool images and 1,200 validation images.*
 
 ---
 
-### 4. Training Run Metrics & Real-Time Performance Tracking
-![3LC Run Metrics](screenshots/3lc_run_metrics.png)
-*Epoch-by-epoch loss convergence, accuracy curves, and gradient telemetry logged across experimental runs in the 3LC workspace.*
+### 3. Visual Gallery & Image Quality Inspection
+![3LC Image Gallery Curation](screenshots/3lc_image_gallery_curation_latest.png)
+*High-resolution 3LC image gallery used to audit visual fidelity, class boundaries, and anomalous samples.*
 
 ---
 
-### 5. 3LC Workspace Overview
-![3LC Dashboard Overview](screenshots/3lc_dashboard_overview.png)
-*Central 3LC project dashboard managing dataset revisions, table objects, run logs, and data pipelines.*
-
----
-
-## 📈 Benchmark Progression Across Iteration Rounds
+## 📈 Benchmark Progression Across Iterations
 
 | Iteration Round | Strategy & Methodology | Peak Validation Acc | Real-World Generalization | Kaggle LB Status |
 | :--- | :--- | :---: | :---: | :---: |
@@ -60,13 +55,13 @@ The 3LC platform was leveraged to inspect, curate, weight, and track datasets an
 | **Round 2** | Raw pseudo-labeling (3,000 images) + AdamW | 75.33% | — | +7.08% |
 | **Round 3** | Curated 3,000 images + SGD Nesterov + MixUp ($\alpha=0.3$) | 80.25% | — | +12.00% |
 | **Round 4** | CutMix ($\alpha=1.0$) + MixUp + Dynamic Model EMA (decay = 0.999) | 81.25% | LB: 0.79555 | Top 10 |
-| **Round 5** | OpenCLIP Foundation Consensus Curation (3,000-table) | 83.08% | — | Top 5 |
-| **Round 6** | Multi-Teacher (ViT-B/16 + ViT-B/32) Soft Knowledge Distillation | 83.92% | 86.42% (Unseen HF Dataset) | Contender |
-| **Round 7 (Grand Master)** | **DINOv2 (92.58% Probe) + OpenCLIP Consensus + 224px Bicubic CutMix + SWA** | **84.92% 🏆** | **87.80%+ Real-World** | **Surpasses Kaggle Rank #1 (0.84555)** |
+| **Round 5** | OpenCLIP Foundation Consensus Curation (3,000-table) | 83.08% | LB: 0.83111 | Top 5 |
+| **Round 6** | Multi-Teacher (ViT-B/16 + ViT-B/32) Soft Knowledge Distillation | 83.92% | 86.42% (Unseen HF Dataset) | Top 3 |
+| **Round 7 (Grand Master)** | **DINOv2 (92.58% Probe) + OpenCLIP Consensus + 224px Bicubic CutMix + SWA** | **84.92% (Val) / 87.80%+ (OOD)** | **High Generalization** | **Rank #2 (0.85777) 🥈** |
 
 ---
 
-## 🧠 Cutting-Edge Engineering Architecture
+## 🧠 System Architecture & Methodology
 
 ```
                                   [6,000 Unlabeled Pool Images]
@@ -86,6 +81,7 @@ The 3LC platform was leveraged to inspect, curate, weight, and track datasets an
                                                 │
                                                 ▼
                          [3LC Table Revision: 600 Seed + 2,400 Pure]
+                           (Strict 3,000 Active Budget Curation)
                                                 │
                                                 ▼
                     [Advanced 224px Multi-Teacher Distillation Pipeline]
@@ -109,33 +105,32 @@ The 3LC platform was leveraged to inspect, curate, weight, and track datasets an
 
 ## 🚀 Key Technical Highlights
 
-1. **Information-Theoretic Knowledge Transfer**:
-   - Compressed 400M+ parameter foundation models (OpenCLIP + DINOv2 Base) into an 11M parameter standard `ResNet18Classifier` trained strictly from scratch without violating competition weight constraints.
-2. **Optimal Receptive Field Scaling**:
-   - Upscaled native images to $224\times 224$ using anti-aliased bicubic interpolation to perfectly match ResNet-18’s $7\times 7$ conv1 kernel receptive field, unlocking critical high-frequency geometric cues.
+1. **Information-Theoretic Multi-Teacher Distillation**:
+   - Distilled dark knowledge from multiple foundation models (DINOv2 Base + OpenCLIP ViT-B/16 & ViT-B/32) into a standard `ResNet-18` trained strictly from scratch (`weights=None`).
+2. **Optimal 224×224 Receptive Field Alignment**:
+   - Upscaled native inputs to $224\times 224$ with bicubic anti-aliasing to match ResNet-18's $7\times 7$ conv1 kernel receptive field, unlocking fine-grained texture discrimination between mountain and glacier topologies.
 3. **CutMix Soft-Distribution Interpolation**:
-   - Blended image patches alongside their multi-teacher continuous probability distributions to prevent background shortcut learning.
+   - Blended image patches alongside their multi-teacher continuous probability distributions to regularize against background shortcut features.
 4. **Dual-Crop Test-Time Augmentation (TTA)**:
-   - Evaluated horizontal flip + multi-crop probability ensembles to eliminate single-view variance.
+   - Evaluated horizontal flips + multi-crop probability ensembles to eliminate single-view variance.
 
 ---
 
 ## 📂 Project Structure
 
 ```
-├── screenshots/                # 3LC Dashboard & Table Visualizations
-│   ├── 3lc_dashboard_overview.png
-│   ├── 3lc_run_metrics.png
-│   ├── 3lc_confusion_matrix_embeddings.png
-│   ├── 3lc_sample_weights_curation.png
-│   └── 3lc_data_table_inspection.png
-├── best_model.pth              # 84.92% All-Time Record Checkpoint
-├── snapshot_overnight_*.pth    # Elite 84.5%+ Snapshots
-├── extract_multi_teacher_consensus.py  # DINOv2 + OpenCLIP Teacher Extractor
-├── train_distill_v2.py         # Advanced CutMix 224px Distillation Engine
-├── generate_master_overnight_submission.py # Master 6-Model Ensemble Generator
-├── submission.csv              # Final Kaggle-ready predictions
-└── README.md                   # Full Documentation & 3LC Report
+├── screenshots/
+│   ├── kaggle_leaderboard_rank2_085777.png    # Official Kaggle Leaderboard
+│   ├── 3lc_class_weights_balance_latest.png  # Exact 3,000 sample budget validation
+│   ├── 3lc_tables_overview_latest.png        # 3LC Dataset table versions
+│   └── 3lc_image_gallery_curation_latest.png # 3LC Visual gallery inspection
+├── best_model.pth                            # 84.92% Peak Validation Checkpoint
+├── snapshot_overnight_*.pth                  # Elite Snapshots (84.5% - 84.9%)
+├── extract_multi_teacher_consensus.py        # Multi-Teacher Feature Extractor
+├── train_distill_v2.py                       # 224px CutMix Distillation Engine
+├── generate_master_overnight_submission.py   # Grand Master Ensemble Generator
+├── submission.csv                            # Final Kaggle Submission
+└── README.md                                 # Technical Report & Documentation
 ```
 
 ---
